@@ -48,7 +48,6 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import com.google.common.collect.Iterables;
 
-import de.vandermeer.asciitable.AsciiTable;
 
 public class Main {
 	public static String ns = "http://www.semanticweb.org/alex/ontologies/2018/1/untitled-ontology-8#";
@@ -80,7 +79,7 @@ public class Main {
     	}
     }
     
-	public static void addData(OWLOntology ont, String data) throws OWLOntologyStorageException, OWLOntologyCreationException{
+	public static void addData(OWLOntology ont, String data, Boolean selected) throws OWLOntologyStorageException, OWLOntologyCreationException{
 		
 		BufferedReader buff;
 		String line = "";
@@ -90,7 +89,7 @@ public class Main {
 		
 		// Open the Ontology
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		//File file = new File(ont);
+		
 		OWLDataFactory factory = manager.getOWLDataFactory();
         OWLOntology ontology = ont;
 		//ontology = manager.loadOntologyFromOntologyDocument(file);
@@ -149,10 +148,41 @@ public class Main {
 	            }
 	            
 	            //Contract add
-	            for(int i=13; i<21; i++){
+	            for(int i=13; i<16; i++){
+	            	/*
 	            	OWLDataProperty hasDataProperty = factory.getOWLDataProperty( IRI.create( ns+headers[i]));
 	            	OWLAxiom axiom12 = factory.getOWLDataPropertyAssertionAxiom(hasDataProperty, contract, resLine[i]);
 	                manager.applyChange(new AddAxiom(ontology, axiom12));
+	               */
+	            	
+	                OWLObjectProperty hasObjProperty = factory.getOWLObjectProperty( IRI.create( ns+headers[i]));
+	                OWLNamedIndividual individual = factory.getOWLNamedIndividual( IRI.create( ns+ resLine[i]));
+	            	OWLAxiom axiom120 = factory.getOWLObjectPropertyAssertionAxiom(hasObjProperty, contract,
+	            			individual);
+		    		manager.applyChange(new AddAxiom(ontology, axiom120));
+	                 
+	            }
+	            for(int i=18; i<21; i++){
+	            	/*
+	            	OWLDataProperty hasDataProperty = factory.getOWLDataProperty( IRI.create( ns+headers[i]));
+	            	OWLAxiom axiom12 = factory.getOWLDataPropertyAssertionAxiom(hasDataProperty, contract, resLine[i]);
+	                manager.applyChange(new AddAxiom(ontology, axiom12));
+	                */
+	            	
+	                OWLObjectProperty hasObjProperty = factory.getOWLObjectProperty( IRI.create( ns+headers[i]));
+	                OWLNamedIndividual individual = factory.getOWLNamedIndividual( IRI.create( ns+ resLine[i]));
+	            	OWLAxiom axiom121 = factory.getOWLObjectPropertyAssertionAxiom(hasObjProperty, contract,
+	            			individual);
+		    		manager.applyChange(new AddAxiom(ontology, axiom121));
+		    		
+	                
+	            }
+	            for(int i=16; i<18; i++){
+	            	
+	              	OWLDataProperty hasDataProperty = factory.getOWLDataProperty( IRI.create( ns+headers[i]));
+	            	OWLAxiom axiom122 = factory.getOWLDataPropertyAssertionAxiom(hasDataProperty, contract, resLine[i]);
+	                manager.applyChange(new AddAxiom(ontology, axiom122));	  
+	                             
 	            }
 	            
 	            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -175,11 +205,16 @@ public class Main {
                 OWLDataProperty expectedRevenue = factory.getOWLDataProperty( IRI.create( ns+"expectedRevenue"));
             	OWLAxiom axiom15 = factory.getOWLDataPropertyAssertionAxiom(expectedRevenue, project, Float.valueOf(resLine[26]));
                 manager.applyChange(new AddAxiom(ontology, axiom15));
-                		
-                OWLAxiom axiom16 = factory.getOWLObjectPropertyAssertionAxiom(hasRisk, project,
-	                    risk);
-	    		manager.applyChange(new AddAxiom(ontology, axiom16));
-
+                                
+                if (selected){
+	                OWLAxiom axiom16 = factory.getOWLObjectPropertyAssertionAxiom(hasRisk, project,
+		                    risk);
+		    		manager.applyChange(new AddAxiom(ontology, axiom16));
+                }else{
+                	OWLAxiom axiom16 = factory.getOWLObjectPropertyAssertionAxiom(hasRisk, project,
+                			factory.getOWLNamedIndividual( IRI.create( ns+ "blank")));
+    	    		manager.applyChange(new AddAxiom(ontology, axiom16));
+                }
 	        }
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -189,11 +224,10 @@ public class Main {
 			e.printStackTrace();
 		}
 
-        //manager.saveOntology( ontology, IRI.create(file.toURI()));
 		//return ontology;
 	}
 
-	public static String doReason(String ontfile, String csvfile){
+	public static void doReason(String ontfile, String csvfile, Boolean selected, Boolean save){
 	    
 	    File file = new File(ontfile);
 	    
@@ -202,7 +236,11 @@ public class Main {
 	    OWLOntology ontology = null;
 	    try {
 	        ontology = manager.loadOntologyFromOntologyDocument(file);
-	        addData(ontology, csvfile);
+	        addData(ontology, csvfile, selected);
+	        //Save to ontology for Protege analysis
+	        if(save){
+	        	manager.saveOntology(ontology, IRI.create(file.toURI()));
+	        }
 	    } catch (OWLOntologyCreationException e) {
 	        e.printStackTrace();
 	    } catch (OWLOntologyStorageException e) {
@@ -213,36 +251,39 @@ public class Main {
 	    
 	     OWLClass riskCls = factory.getOWLClass(IRI.create(ontology.getOntologyID()
 	             .getOntologyIRI().toString()
-	             + "#Risk"));
-	             
-		 AsciiTable at = new AsciiTable();
-	
-		 at.addRule();
-		 at.addRow("Project", "Tier1", "Tier2", "Comments");
-	
-		 for (OWLClass c : riskCls.getClassesInSignature()) {
-		     NodeSet<OWLNamedIndividual> instances = reasoner.getInstances(c, false);
-		     
-		     for(OWLNamedIndividual i : instances.getFlattened()){
-		         NodeSet<OWLClass> classes = reasoner.getTypes(i, false);
-		         for(OWLClass k : classes.getFlattened()){
-		             if(!k.getIRI().getFragment().matches("Thing|Project|RiskCategories|NoRisk|Risk|CapabilityRisk|ClientRisk|ContractDealRisk|SolutionRisk")){
-		                 Set<OWLClass> cls = reasoner.getSuperClasses(k, true).getFlattened();
-		                 at.addRule();
-		                 at.addRow(i.getIRI().getFragment(), 
-		                         cls.iterator().next().getIRI().getFragment(), 
-		                         k.getIRI().getFragment(),
-		                         hasComment(k, ontology));
-		             }
-		             
-		         }
-		     }
-		 }
-	
-	
-		 at.addRule();
-		 String rend = at.render();
-		 return rend;
+	             + "#ProjectWithRisk"));
+	                 
+	     String leftAlignFormat = "| %-15s | %-26s | %-26s | %-52s |%n";
+	     System.out.format("+-----------------+----------------------------+----------------------------+------------------------------------------------------+%n");
+	     System.out.format("| Project         | Tier1 Risk                 | Tier2 Risk                 | Description                                          |%n");
+	     System.out.format("+-----------------+----------------------------+----------------------------+------------------------------------------------------+%n");
+	     
+	     for (OWLClass c : riskCls.getClassesInSignature()) {
+	         NodeSet<OWLNamedIndividual> instances = reasoner.getInstances(c, false);
+	         
+	         for(OWLNamedIndividual i : instances.getFlattened()){
+	             //System.out.println(i.getIRI().getFragment());
+	             NodeSet<OWLClass> classes = reasoner.getTypes(i, false);
+	             for(OWLClass k : classes.getFlattened()){
+	                 if(!k.getIRI().getFragment().matches("Thing|Project|ProjectWithNoRisk|ProjectWithRisk|CapabilityRisk|ClientRisk|ContractDealRisk|SolutionRisk")){
+	                     Set<OWLClass> cls = reasoner.getSuperClasses(k, true).getFlattened();
+
+	                     System.out.format(
+	                             leftAlignFormat,i.getIRI().getFragment(), 
+	                             cls.iterator().next().getIRI().getFragment(), 
+	                             k.getIRI().getFragment(),
+	                             hasComment(k, ontology)
+	                             );
+
+	                 }
+	                 
+	             }
+	         }
+	     }
+
+	     System.out.format("+-----------------+----------------------------+----------------------------+------------------------------------------------------+%n");
+
+
 	}
 	
 	public static void main(String[] args) throws TransformerException, OWLOntologyCreationException, OWLOntologyStorageException {

@@ -28,8 +28,6 @@
 	<classpathentry kind="lib" path="lib/jjtraveler-0.6.jar"/>
 	<classpathentry kind="lib" path="lib/jsr305-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.io-2.4.jar"/>
-	<classpathentry kind="lib" path="lib/owlapi-distribution-3.4.5.jar"/>
-	<classpathentry kind="lib" path="lib/owlapi-distribution-4.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/pellet-cli-ignazio1977-2.4.0-ignazio1977.jar"/>
 	<classpathentry kind="lib" path="lib/pellet-common-2.3.6-ansell.jar"/>
 	<classpathentry kind="lib" path="lib/pellet-core-ignazio1977-2.4.0-ignazio1977.jar"/>
@@ -53,5 +51,8 @@
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="lib" path="lib/asciitable-0.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/char-translation-0.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/owlapi-distribution-3.4.5.jar"/>
+	<classpathentry kind="lib" path="lib/owlapi-distribution-4.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/com.springsource.org.relaxng.datatype-1.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

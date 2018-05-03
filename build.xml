@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="runOnt">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="runOnt.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/antlr-2.7.7.jar"/>
+        <pathelement location="lib/antlr-runtime-3.4.jar"/>
+        <pathelement location="lib/aopalliance-1.0.jar"/>
+        <pathelement location="lib/ascii-utf-themes-0.0.1.jar"/>
+        <pathelement location="lib/aterm-java-1.8.2-p1.jar"/>
+        <pathelement location="lib/com.ibm.icu_3.4.4.1.jar"/>
+        <pathelement location="lib/commons-codec-1.6.jar"/>
+        <pathelement location="lib/commons-io-2.4.jar"/>
+        <pathelement location="lib/commons-lang3-3.4.jar"/>
+        <pathelement location="lib/commons-logging-1.2.jar"/>
+        <pathelement location="lib/guava-18.0.jar"/>
+        <pathelement location="lib/guice-4.0-beta.jar"/>
+        <pathelement location="lib/guice-assistedinject-4.0-beta.jar"/>
+        <pathelement location="lib/guice-multibindings-4.0-beta.jar"/>
+        <pathelement location="lib/httpclient-4.2.3.jar"/>
+        <pathelement location="lib/httpcore-4.2.2.jar"/>
+        <pathelement location="lib/iri-0.8.jar"/>
+        <pathelement location="lib/javax.inject-1.jar"/>
+        <pathelement location="lib/jena-arq-2.10.1.jar"/>
+        <pathelement location="lib/jena-core-3.6.0.jar"/>
+        <pathelement location="lib/jena-iri-0.9.6.jar"/>
+        <pathelement location="lib/jena.jar"/>
+        <pathelement location="lib/jgrapht-jdk1.5-0.7.3.jar"/>
+        <pathelement location="lib/jjtraveler-0.6.jar"/>
+        <pathelement location="lib/jsr305-2.0.1.jar"/>
+        <pathelement location="lib/org.apache.commons.io-2.4.jar"/>
+        <pathelement location="lib/pellet-cli-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-common-2.3.6-ansell.jar"/>
+        <pathelement location="lib/pellet-core-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-examples-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-explanation-2.3.6-ansell.jar"/>
+        <pathelement location="lib/pellet-explanation-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-jena-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-modularity-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-owlapiv3-2.3.2-SNAPSHOT.jar"/>
+        <pathelement location="lib/pellet-pellint-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-query-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/pellet-test-ignazio1977-2.4.0-ignazio1977.jar"/>
+        <pathelement location="lib/shared-objects-1.4.9-p1.jar"/>
+        <pathelement location="lib/skb-interfaces-0.0.1.jar"/>
+        <pathelement location="lib/slf4j-simple-1.7.7.jar"/>
+        <pathelement location="lib/ST4-4.0.8.jar"/>
+        <pathelement location="lib/stringtemplate-3.2.1.jar"/>
+        <pathelement location="lib/trove4j-3.0.3.jar"/>
+        <pathelement location="lib/xerces-2.7.1.jar"/>
+        <pathelement location="lib/xercesImpl-2.11.0.jar"/>
+        <pathelement location="lib/xml-apis-1.4.01.jar"/>
+        <pathelement location="lib/asciitable-0.3.2.jar"/>
+        <pathelement location="lib/char-translation-0.0.2.jar"/>
+        <pathelement location="lib/owlapi-distribution-3.4.5.jar"/>
+        <pathelement location="lib/owlapi-distribution-4.1.0-SNAPSHOT.jar"/>
+        <pathelement location="lib/com.springsource.org.relaxng.datatype-1.0.0.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="runOnt.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="Main">
+        <java classname="runOnt.Main" failonerror="true" fork="yes">
+            <classpath refid="runOnt.classpath"/>
+        </java>
+    </target>
+</project>

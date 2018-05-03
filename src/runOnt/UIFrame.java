@@ -27,9 +27,11 @@ import javax.swing.JLabel;
 
 import java.awt.Font;
 import java.awt.Color;
+
 import java.io.PrintStream;
 
 import javax.swing.JTextArea;
+import javax.swing.JCheckBox;
 
 
 
@@ -45,13 +47,14 @@ public class UIFrame extends JFrame {
 	private JLabel lblOntology;
 	private JLabel lblCsvFile;
 	private JButton btnExecuteReasoner;
-	private String AsciiString;
+	private JCheckBox chckbxUseMlSugggestion;
+	private JCheckBox chckbxSaveToOntolgy;
 	
 
 
 	public UIFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 783, 613);
+		setBounds(100, 100, 960, 613);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -152,6 +155,21 @@ public class UIFrame extends JFrame {
 		gbc_btnBrowse_CSV.gridy = 2;
 		contentPane.add(btnBrowse_CSV, gbc_btnBrowse_CSV);
 		
+		chckbxUseMlSugggestion = new JCheckBox("Use ML sugggestion");
+		chckbxUseMlSugggestion.setSelected(true);
+		GridBagConstraints gbc_chckbxUseMlSugggestion = new GridBagConstraints();
+		gbc_chckbxUseMlSugggestion.insets = new Insets(0, 0, 5, 5);
+		gbc_chckbxUseMlSugggestion.gridx = 8;
+		gbc_chckbxUseMlSugggestion.gridy = 3;
+		contentPane.add(chckbxUseMlSugggestion, gbc_chckbxUseMlSugggestion);
+		
+		chckbxSaveToOntolgy = new JCheckBox("Save to ontolgy file");
+		GridBagConstraints gbc_chckbxSaveToOntolgy = new GridBagConstraints();
+		gbc_chckbxSaveToOntolgy.insets = new Insets(0, 0, 5, 5);
+		gbc_chckbxSaveToOntolgy.gridx = 8;
+		gbc_chckbxSaveToOntolgy.gridy = 4;
+		contentPane.add(chckbxSaveToOntolgy, gbc_chckbxSaveToOntolgy);
+		
 		
 		JTextArea txtConsole = new JTextArea();
 		txtConsole.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -171,16 +189,31 @@ public class UIFrame extends JFrame {
 		btnExecuteReasoner.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Component frame = null;
+				/*
+				Main.doReason(
+						"C:/Users/Alex Suciu/Desktop/CSV Convert/new/Second.owl", 
+						"C:/Users/Alex Suciu/Desktop/CSV Convert/new/importx.csv",
+						chckbxUseMlSugggestion.isSelected(),
+						chckbxSaveToOntolgy.isSelected()
+						);
+				*/
+				
+				
 				if(textField_Ont.getText().isEmpty() && textField_Ont.getText() != null){
 					JOptionPane.showMessageDialog(frame, "Please select an Ontology File");
 				}else if(textField_CSV.getText().isEmpty() && textField_CSV.getText() != null){
 					JOptionPane.showMessageDialog(frame, "Please select a CSV file");
-				}else{
-					txtConsole.setText(Main.doReason(textField_Ont.getText(), textField_CSV.getText()));
-					System.out.println(Main.doReason(textField_Ont.getText(), textField_CSV.getText()));
-					
+				}else{ 	
+					Main.doReason(textField_Ont.getText(), 
+						textField_CSV.getText() , 
+						chckbxUseMlSugggestion.isSelected(),
+						chckbxSaveToOntolgy.isSelected()
+						);
 				}
+				
+				
 					
+									
 			}
 		});
 		btnExecuteReasoner.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -190,14 +223,12 @@ public class UIFrame extends JFrame {
 		gbc_btnExecuteReasoner.gridx = 5;
 		gbc_btnExecuteReasoner.gridy = 3;
 		contentPane.add(btnExecuteReasoner, gbc_btnExecuteReasoner);
-		
-		//PrintStream out = new PrintStream( new TextAreaOutputStream( txtConsole ) );
+				
+		PrintStream out = new PrintStream( new TextAreaOutputStream( txtConsole ) );
 		// redirect standard output stream to the TextAreaOutputStream
-		//System.setOut( out );
+		System.setOut( out );
 		// redirect standard error stream to the TextAreaOutputStream
 		//System.setErr( out );
-		// now test the mechanism
-		//
 	}
 
 }
